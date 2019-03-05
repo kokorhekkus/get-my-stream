@@ -39,8 +39,7 @@ while 1:
         except Exception as e:
             print(e)
 
-    p2 = p['photos']
-    total_pages = p2['pages']
+    total_pages = p['photos']['pages']
     print("Total pages are %d" % total_pages)
     
     if(page == total_pages):
