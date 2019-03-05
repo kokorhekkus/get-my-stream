@@ -6,7 +6,6 @@ import sys
 api_key = '9e340ba2325f072d3994e7be5fb8f02b'
 api_secret = 'f3ede0e7cd1c808f'
 if len(sys.argv) == 2:
-    #user_id = '44176346@N00'
     user_id = sys.argv[1]
 else:
     print("Requires a single argument, which is your Flickr ID: quitting")
