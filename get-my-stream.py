@@ -11,7 +11,6 @@ else:
     print("Requires a single argument, which is your Flickr ID: quitting")
     quit()
 
-print(user_id)
 flickr = flickrapi.FlickrAPI(api_key, api_secret)
 flickr.authenticate_via_browser(perms='read') # needed to get my own non-public photos
 
@@ -61,24 +60,3 @@ for i in urls:
         quit()
 
     photo_number += 1
-
-
-# Example dict:
-
-#{u'photos': {u'page': 1,
-#            u'pages': 2081,
-#            u'perpage': 1,
-#            u'photo': [{u'farm': 8,
-#                     u'height_o': u'1944',
-#                     u'id': u'47185604961',
-#                     u'isfamily': 1,
-#                     u'isfriend': 1,
-#                     u'ispublic': 0,
-#                     u'owner': u'44176346@N00',
-#                     u'secret': u'899e269c9d',
-#                     u'server': u'7881',
-#                     u'title': u'Car selfie',
-#                     u'url_o': u'https://farm8.staticflickr.com/7881/47185604961_e6d8b05338_o.jpg',
-#                     u'width_o': u'2592'}],
-#u'total': u'2081'},
-#u'stat': u'ok'}
