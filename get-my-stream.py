@@ -1,7 +1,10 @@
+#!/usr/bin/python
+
 # Download all the photos on my Flickr stream
 import flickrapi
 import urllib
 import sys
+import pprint
 
 api_key = '9e340ba2325f072d3994e7be5fb8f02b'
 api_secret = 'f3ede0e7cd1c808f'
@@ -16,7 +19,7 @@ flickr.authenticate_via_browser(perms='read') # needed to get my own non-public 
 
 # Get the urls for all the photos
 per_page = 500
-urls = []
+urls = {}
 page = 1
 while 1:
     # Note: url_o gets the URL for the original size image.  there are other options e.g. url_c for a compact image
@@ -32,12 +35,14 @@ while 1:
     for i in photos:
         try:
             url = i["url_o"]
-            urls.append(url)
+            id = i["id"]
         except KeyError:
-            print("Failed to get URL for this photo:")
-            print(i)
+            print("Failed to get URL or id for this photo:")
+            pprint.pprint(i)
         except Exception as e:
             print(e)
+
+        urls[id] = url
 
     total_pages = p['photos']['pages']
     print("Total pages are %d" % total_pages)
@@ -46,16 +51,28 @@ while 1:
         break
     else:
         page += 1
-        
+
+# Open or create our file which keeps a record of what photos we've already downloaded
+already_dled = []
+for pic_id in open('id_data.txt','a+'):
+    already_dled.append(pic_id)
+
 # Download all the photos
-photo_number = 1
-for i in urls:
-    jpg_name = str(photo_number) + '.jpg'
+f = open('id_data.txt','a')
+
+for id, url in urls.items():
+    if(id in already_dled):
+        continue
+    
+    jpg_name = id + '.jpg'
     try:
-        urllib.urlretrieve(i, jpg_name)
+        urllib.urlretrieve(url, jpg_name)
     except Exception as e:
         print("Could not retrieve photo at %s" % i)
         print(e)
-        quit()
+        continue
 
-    photo_number += 1
+    id_line = id + '\n'
+    f.write(id_line)
+
+f.close()
