@@ -4,7 +4,6 @@
 import flickrapi
 import urllib
 import sys
-import pprint
 import logging
 logging.basicConfig(filename='get-my-stream.log',level=logging.DEBUG)
 
@@ -26,13 +25,15 @@ urls = {}
 page = 1
 while 1:
     # Note: url_o gets the URL for the original size image.  there are other options e.g. url_c for a compact image
-    logging.debug('Getting page %d', page)
     try:
         p = flickr.photos.search(user_id=user_id,per_page=per_page,page=page,extras='url_o',format='parsed-json')
     except Exception as e:
         logging.error('Failed to retrieve photos from Flickr:')
         logging.error(e)
         quit()
+
+    total_pages = p['photos']['pages']
+    logging.debug('Got page %d of %d', page, total_pages)
 
     photos = p['photos']['photo']
     for i in photos:
@@ -47,9 +48,6 @@ while 1:
 
         urls[id] = url
 
-    total_pages = p['photos']['pages']
-    logging.debug('Total pages are %d', total_pages)
-    
     if(page == total_pages):
         break
     else:
